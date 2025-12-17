@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+
+jobs:
+  ruby:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.1"
+          bundler-cache: true
+
+      - name: Run tests (auto-detect)
+        run: |
+          set -e
+          if [ -d "spec" ]; then
+            echo "Running: bundle exec rspec"
+            bundle exec rspec
+          elif [ -f "Rakefile" ]; then
+            echo "Running: bundle exec rake"
+            bundle exec rake
+          else
+            echo "No spec/ or Rakefile found. Running: bundle exec ruby -c on lib/ files"
+            find lib -name "*.rb" -print0 2>/dev/null | xargs -0 -r -n1 ruby -c
+          fi
