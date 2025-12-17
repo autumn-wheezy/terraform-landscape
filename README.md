@@ -57,3 +57,11 @@ terraform plan ... | docker run -i --rm landscape
 ## License
 
 This project is released under the [Apache 2.0 license](LICENSE).
+
+### Helper script
+
+For convenience, you can run Terraform and pipe the output into `landscape` using:
+
+```bash
+./scripts/landscape-plan.sh [terraform plan args...]
+
